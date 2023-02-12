@@ -1,12 +1,7 @@
-﻿using FileTransferAssist.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
+﻿using FileTransferAssist.COMHelper;
+using FileTransferAssist.Utils;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using FileTransferAssist.COMHelper;
+using System.Net.Sockets;
 
 namespace FileTransferAssist.Server
 {
@@ -139,5 +134,4 @@ namespace FileTransferAssist.Server
             Console.WriteLine(this.ftServerWorker.bytes.Count);
         }
     }
-
 }

@@ -1,11 +1,6 @@
 ﻿using FileTransferAssist.COMHelper;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileTransferAssist.Server
 {
@@ -117,7 +112,6 @@ namespace FileTransferAssist.Server
                         }
                         else if (buffer.Count < COMDefine.DefaultBufferSize)
                         {
-
                         }
                     }
                     catch
@@ -133,7 +127,6 @@ namespace FileTransferAssist.Server
             }
             catch
             {
-
             }
         }
 
@@ -210,9 +203,11 @@ namespace FileTransferAssist.Server
                 case Common.Control.CINIT:
                     CommunicationInputClientInfo(clientNumber, bytes);
                     break;
+
                 case Common.Control.SINIT:
                     CommunicationAddFileInfo(clientNumber, bytes);
                     break;
+
                 case Common.Control.FTS:
                     CommunicationFileTransferStop(clientNumber);
                     break;
@@ -241,5 +236,4 @@ namespace FileTransferAssist.Server
             this.userList[clientNumber].FileWrite(guid, dataNumber, data);
         }
     }
-
 }

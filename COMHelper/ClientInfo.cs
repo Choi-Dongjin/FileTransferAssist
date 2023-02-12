@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileTransferAssist.COMHelper
 {
@@ -27,7 +22,8 @@ namespace FileTransferAssist.COMHelper
 
         private Guid guidClient;
 
-        public Guid GuidClient { get { return guidClient; } set { guidClient = value; } }
+        public Guid GuidClient
+        { get { return guidClient; } set { guidClient = value; } }
 
         public CancellationTokenSource dataReceivedCTS = new CancellationTokenSource();
 
@@ -66,7 +62,8 @@ namespace FileTransferAssist.COMHelper
         /// </summary>
         private bool isDone = false;
 
-        public bool IsDone { get { return isDone; } }
+        public bool IsDone
+        { get { return isDone; } }
 
         private void StopClient()
         {

@@ -1,9 +1,5 @@
 ﻿using FileTransferAssist.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FileTransferAssist.COMHelper
 {
@@ -18,12 +14,10 @@ namespace FileTransferAssist.COMHelper
 
         public static (Guid UniqueNumber, long ByteLength, string FileName, string FileDir) ParsingInit(byte[] readBuffer)
         {
-
             var byuniqueNumber = readBuffer.Skip(2).Take(16);
             var bybyteLength = readBuffer.Skip(18).Take(8);
             var byfilePathInfo = readBuffer.Skip(26).Take(readBuffer.Length);
             List<string> datas = ParsingGroupData(byfilePathInfo.ToArray());
-
 
             Guid uniqueNumber = new Guid(byuniqueNumber.ToArray());
             long byteLength = BitConverter.ToInt64(bybyteLength.ToArray(), 0);

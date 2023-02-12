@@ -1,6 +1,6 @@
-﻿using System.Net.Sockets;
-using FileTransferAssist.COMHelper;
+﻿using FileTransferAssist.COMHelper;
 using FileTransferAssist.Utils;
+using System.Net.Sockets;
 
 namespace FileTransferAssist.Client
 {
@@ -50,11 +50,13 @@ namespace FileTransferAssist.Client
 
         private bool isOK = false;
 
-        public bool IsOK { get { return isOK; } }
+        public bool IsOK
+        { get { return isOK; } }
 
         private Guid guid;
 
-        public Guid Guid { get { return guid; } set { guid = value; } }
+        public Guid Guid
+        { get { return guid; } set { guid = value; } }
 
         private TcpClient? client;
 
@@ -184,7 +186,7 @@ namespace FileTransferAssist.Client
                 }
                 stream.Close();
                 stream1?.Close();
-                //Thread.Sleep(100);                                                                                                                                                                                                                            
+                //Thread.Sleep(100);
             }
         }
     }

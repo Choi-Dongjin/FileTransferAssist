@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 
 namespace FileTransferAssist.COMHelper
 {
@@ -19,9 +14,11 @@ namespace FileTransferAssist.COMHelper
         private readonly ConcurrentDictionary<int, byte[]> buffer = new();
 
         private bool isDone = false;
-        public bool IsDone { get { return isDone; } }
+        public bool IsDone
+        { get { return isDone; } }
 
         public delegate void DoneEvent(Guid guid);
+
         public DoneEvent? doneEvent;
 
         public COMFileInfo(Guid guid, string name, string dir, long size, DoneEvent? doneEvent)
@@ -71,7 +68,6 @@ namespace FileTransferAssist.COMHelper
                 this.size -= data.Length;
                 this.fileWritenumber++;
             }
-
         }
 
         private void FileScanWrite(int number)
