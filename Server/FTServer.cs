@@ -133,5 +133,18 @@ namespace FileTransferAssist.Server
         {
             Console.WriteLine(this.ftServerWorker.bytes.Count);
         }
+
+        public void ClientTrainsFile(int cNumber, string localPath, string onlinePath)
+        {
+            this.ftServerWorker.userList[cNumber].TrainsFile(localPath, onlinePath);
+        }
+
+        public void TestClientTrainsFile(string localPath, string onlinePath)
+        {
+            foreach (var client in this.ftServerWorker.userList.Values)
+            {
+                client.TrainsFile(localPath, onlinePath, true);
+            }
+        }
     }
 }

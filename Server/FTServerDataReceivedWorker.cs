@@ -56,7 +56,7 @@ namespace FileTransferAssist.Server
             ClientInfo clientInfo = new(number, client);
             this.userList.TryAdd(number, clientInfo);
             //clientInfo.TcpClient.GetStream().BeginRead(clientInfo.DataBuffer, 0, clientInfo.DataBuffer.Length, new AsyncCallback(DataReceived), clientInfo);
-            Task.Factory.StartNew(() => DataReceived(clientInfo, clientInfo.dataReceivedCTS.Token));
+            Task.Factory.StartNew(() => DataReceived(clientInfo, clientInfo.DataReceivedCTS.Token), CT);
         }
 
         public void ClientDel(int clientNumber)
@@ -64,7 +64,7 @@ namespace FileTransferAssist.Server
             if (this.userList.TryRemove(this.userList[clientNumber].Number, out ClientInfo? client))
             {
                 client?.StopRoRequest();
-                client?.dataReceivedCTS.Cancel();
+                client?.DataReceivedCTS.Cancel();
             }
         }
 

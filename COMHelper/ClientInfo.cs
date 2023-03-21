@@ -25,9 +25,16 @@ namespace FileTransferAssist.COMHelper
         public Guid GuidClient
         { get { return guidClient; } set { guidClient = value; } }
 
-        public CancellationTokenSource dataReceivedCTS = new CancellationTokenSource();
+        private CancellationTokenSource dataReceivedCTS = new CancellationTokenSource();
 
-        public readonly ConcurrentDictionary<Guid, COMFileInfo> COMFileInfo = new ConcurrentDictionary<Guid, COMFileInfo>();
+        public CancellationTokenSource DataReceivedCTS
+        { get { return dataReceivedCTS; } }
+
+        private ConcurrentDictionary<Guid, COMFileInfo> comFileInfo = new ConcurrentDictionary<Guid, COMFileInfo>();
+
+        public ConcurrentDictionary<Guid, COMFileInfo> COMFileInfo
+        { get { return comFileInfo; } }
+
 
         private int number;
 
@@ -120,6 +127,56 @@ namespace FileTransferAssist.COMHelper
         {
             this.COMFileInfo.TryGetValue(guid, out COMFileInfo? comFileInfo);
             comFileInfo?.FileWrite(number, bytes);
+        }
+
+        /// <summary>
+        /// 파일 전송
+        /// </summary>
+        /// <param name="localFilePath">소스 파일 경로</param>
+        /// <param name="remoteFilePath">저장 위치 경로</param>
+        /// <param name="modeTest">비교용 Test 파일 생성 여부</param>
+        public void TrainsFile(string localFilePath, string remoteFilePath, bool modeTest = false)
+        {
+            string? fileDir = Path.GetDirectoryName(remoteFilePath);
+            string fileName = Path.GetFileName(remoteFilePath);
+            if (!string.IsNullOrEmpty(fileDir) && this.TcpClient != null)
+            {
+                Guid guid = Guid.NewGuid();
+                FileStream stream = new(localFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                FileStream? stream1 = null;
+                if (modeTest)
+                    stream1 = new FileStream(remoteFilePath + ".T", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+                long fileLength = stream.Length;
+
+                byte[] sendData = ByteCreator.ControlInit(guid, fileName, fileDir, fileLength);
+                //var TsendData = sendData.Skip(2).Take(sendData.Length);
+                //(GuidClient Tguid, long TdataLength, string TfileName, string TfileDir) = ByteParsing.ParsingInit(TsendData.ToArray());
+
+                this.TcpClient.GetStream().Write(sendData, 0, sendData.Length);
+
+                int number = 0;
+
+                while (fileLength > 0)
+                {
+                    byte[] buffer = new byte[COMDefine.DefaultBufferSize - 21]; // buffer
+                    int lBytes = stream.Read(buffer, 0, COMDefine.DefaultBufferSize - 21);
+                    byte[] fileData = new byte[lBytes];
+                    Buffer.BlockCopy(buffer, 0, fileData, 0, lBytes);
+
+                    byte[] fileDataClient = ByteCreator.FileTransferData(guid, number, fileData);
+                    this.TcpClient.GetStream().Write(fileDataClient, 0, fileDataClient.Length);
+
+                    (Guid _, int _, byte[] TData) = ByteParsing.ParsingFileData(fileDataClient);
+
+                    stream1?.Write(TData);
+
+                    fileLength -= lBytes;
+                    number++;
+                }
+                stream.Close();
+                stream1?.Close();
+                //Thread.Sleep(100);
+            }
         }
     }
 }
