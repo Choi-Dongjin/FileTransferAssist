@@ -35,7 +35,6 @@ namespace FileTransferAssist.COMHelper
         public ConcurrentDictionary<Guid, COMFileInfo> COMFileInfo
         { get { return comFileInfo; } }
 
-
         private int number;
 
         public int Number

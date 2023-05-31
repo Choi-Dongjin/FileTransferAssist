@@ -14,6 +14,7 @@ namespace FileTransferAssist.COMHelper
         private readonly ConcurrentDictionary<int, byte[]> buffer = new();
 
         private bool isDone = false;
+
         public bool IsDone
         { get { return isDone; } }
 
